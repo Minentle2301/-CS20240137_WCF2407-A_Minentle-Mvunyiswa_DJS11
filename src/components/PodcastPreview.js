@@ -1,14 +1,16 @@
+// PodcastPreview.js
 import React from 'react';
-import { Link } from 'react-router-dom';
+import genreTitles from '../Pages/HomePage';
 
 const PodcastPreview = ({ show }) => {
   return (
-    <Link to={`/show/${show.id}`} className="podcast-preview">
+    <div className="podcast-preview">
+      <img src={show.image} alt={show.title} className="podcast-image" />
       <h3>{show.title}</h3>
       <p>{show.description}</p>
-    </Link>
+      <p className="genre">Genre: {genreTitles[show.genre_id]}</p> {/* Display the genre */}
+    </div>
   );
 };
 
 export default PodcastPreview;
-
