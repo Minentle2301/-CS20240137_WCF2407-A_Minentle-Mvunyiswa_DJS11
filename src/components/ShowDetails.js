@@ -18,3 +18,4 @@ const ShowDetails = ({ show }) => {
 };
 
 export default ShowDetails;
+
