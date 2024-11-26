@@ -41,7 +41,7 @@ const HomePage = () => {
       setFilteredPreviews(previews);
     } else {
       // Filter previews by selected genre
-      setFilteredPreviews(previews.filter((show) => show.genre_id === parseInt(genreId)));
+      previews.filter((show) => show.genres.includes(parseInt(genreId)));
     }
   };
 

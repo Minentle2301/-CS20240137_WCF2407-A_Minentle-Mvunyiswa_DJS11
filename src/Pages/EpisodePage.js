@@ -1,47 +1,42 @@
+// EpisodePage.js
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import AudioPlayer from '../components/AudioPlayer';
+import axios from 'axios';
 
 const EpisodePage = () => {
-  const { id } = useParams();
+  const { episodeId } = useParams();  // Get episode ID from URL
   const [episode, setEpisode] = useState(null);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchEpisode = async () => {
-      try {
-        const response = await fetch(`https://podcast-api.netlify.app/id/${id}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setEpisode(data);
-      } catch (error) {
-        console.error('Error fetching episode:', error.message);
-        setError(error.message);
-      }
-    };
-
-    fetchEpisode();
-  }, [id]);
-
-  if (error) {
-    return <h1>Error: {error}</h1>;
-  }
+    // Fetch episode details using the episode ID
+    axios
+      .get(`https://podcast-api.netlify.app/episode/${episodeId}`)
+      .then((response) => {
+        setEpisode(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching episode details:', error);
+      });
+  }, [episodeId]);
 
   if (!episode) {
-    return <h1>Loading...</h1>;
+    return <div>Loading...</div>;  // Loading state
   }
 
   return (
-    <div className="episode-page">
-      <h1>{episode.title}</h1>
-      <AudioPlayer src={episode.audio} />
+    <div className="episode-details">
+      <h2>{episode.title}</h2>
+      <p>{episode.description}</p>
+      <audio controls>
+        <source src={episode.audio_url} type="audio/mp3" />
+        Your browser does not support the audio element.
+      </audio>
     </div>
   );
 };
 
 export default EpisodePage;
+
 
 
 
