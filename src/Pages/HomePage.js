@@ -4,7 +4,7 @@ import PodcastPreview from '../components/PodcastPreview';
 import './HomePage.css';
 
 // Genre Titles Mapping
-const genreTitles = {
+export const genreTitles = {
     1: 'Personal Growth',
     2: 'Investigative Journalism',
     3: 'History',
