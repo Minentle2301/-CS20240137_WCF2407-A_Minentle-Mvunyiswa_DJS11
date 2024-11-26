@@ -4,6 +4,8 @@ import HomePage from './Pages/HomePage';
 import GenrePage from './Pages/GenrePage';
 import ShowPage from './Pages/ShowPage';
 import EpisodePage from './Pages/EpisodePage';
+import './styles.css';
+
 
 const App = () => {
   return (
