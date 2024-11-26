@@ -28,17 +28,12 @@ const ShowPage = () => {
       <h1>{show.title}</h1>  {/* Display the title of the show */}
       <p>{show.description}</p>  {/* Display the description of the show */}
       <div className="seasons">
-        {/* Render list of seasons dynamically using the map function */}
-        {show.seasons.map((season) => (
-          <Link
-            key={season.id}  // Ensure each Link has a unique key (necessary for React to optimize rendering)
-            to={`/season/${season.id}`}  // Link to the season details page using the season's ID
-            className="season-link"
-          >
-            Season {season.number}  {/* Display the season number */}
-          </Link>
-        ))}
-      </div>
+    {show.seasons.map((season) => (
+        <Link key={season.id} to={`/season/${season.id}`} className="season-link">
+            Season {season.number} (Episodes: {season.episodes.length}) {/* Display number of episodes */}
+        </Link>
+    ))}
+</div>
     </div>
   );
 };
