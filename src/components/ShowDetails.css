@@ -1,0 +1,41 @@
+.show-details {
+    text-align: center; /* Center-align text */
+    margin: 20px; /* Add some margin */
+}
+
+.show-image {
+    width: 100%; /* Make the image responsive */
+    max-width: 600px; /* Limit max width */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+    margin-bottom: 20px; /* Space below the image */
+}
+
+h1 {
+    font-size: 2em; /* Increase font size for title */
+    margin: 10px 0; /* Space around the title */
+}
+
+p {
+    font-size: 1.1em; /* Slightly larger font for description */
+    line-height: 1.5; /* Increase line height for readability */
+}
+
+.seasons {
+    margin-top: 20px; /* Space above the seasons section */
+}
+
+.season-link {
+    display: inline-block; /* Make links inline-block */
+    margin: 5px 10px; /* Space between links */
+    padding: 10px 15px; /* Padding for better click area */
+    background-color: #007bff; /* Background color */
+    color: white; /* Text color */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* Remove underline */
+}
+
+.season-link:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}

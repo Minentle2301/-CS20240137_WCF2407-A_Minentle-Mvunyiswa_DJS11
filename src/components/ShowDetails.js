@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { genreTitles } from '../Pages/HomePage'; // Import genreTitles
+import './ShowDetails.css'; // Import the CSS file for styling
 
 const ShowDetails = () => {
     const { id } = useParams(); // Get the podcast ID from the URL
