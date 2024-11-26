@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+
 const PodcastPreview = ({ show }) => {
   return (
     <Link to={`/show/${show.id}`} className="podcast-preview">

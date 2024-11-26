@@ -7,11 +7,12 @@ const ShowDetails = ({ show }) => {
       <h1>{show.title}</h1>
       <p>{show.description}</p>
       <div className="seasons">
-        {show.seasons.map((season) => (
-          <Link key={season.id} to={`/episode/${season.id}`}>
-            Season {season.number}
-          </Link>
-        ))}
+      {show.seasons.map((season) => (
+  <Link key={season.id} to={`/episode/${season.id}`}>
+    Season {season.number}
+  </Link>
+))}
+
       </div>
     </div>
   );
