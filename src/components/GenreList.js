@@ -14,3 +14,4 @@ const GenreList = ({ genres }) => {
 };
 
 export default GenreList;
+
