@@ -32,9 +32,7 @@ const PodcastPreview = ({
       <h3>{show.title}</h3>
       <p>{show.description}</p>
       <p className="genre">Genre: {genreTitles[show.genre_id]}</p>
-      <button onClick={handleFavoriteToggle}>
-        {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
-      </button>
+     
     </div>
   );
 };
