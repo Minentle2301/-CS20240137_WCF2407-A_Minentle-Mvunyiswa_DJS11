@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import genreTitles from "../Pages/HomePage";
+
 
 const PodcastPreview = ({
   show,
