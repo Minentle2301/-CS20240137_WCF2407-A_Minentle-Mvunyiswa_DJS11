@@ -113,7 +113,7 @@ const HomePage = ({ favorites, addFavorite, removeFavorite }) => { // Added prop
             />
           ))
         ) : (
-          <p>No podcasts found for the selected genre or search query.</p>
+          <p>Loading...</p>
         )}
       </div>
     </div>
