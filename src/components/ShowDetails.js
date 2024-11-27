@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
-import './ShowDetails.css'; // CSS file for styling
+import React, { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import axios from "axios";
+import "./ShowDetails.css"; // CSS file for styling
 
 const ShowDetails = () => {
-  const { id } = useParams(); // Get the podcast ID from the URL
+  const { id } = useParams();
   const [show, setShow] = useState(null);
   const [error, setError] = useState(null);
 
@@ -14,8 +14,8 @@ const ShowDetails = () => {
       .get(`https://podcast-api.netlify.app/id/${id}`)
       .then((response) => setShow(response.data))
       .catch((error) => {
-        console.error('Error fetching show details:', error);
-        setError('Failed to load show details. Please try again later.');
+        console.error("Error fetching show details:", error);
+        setError("Failed to load show details. Please try again later.");
       });
   }, [id]);
 
@@ -24,7 +24,7 @@ const ShowDetails = () => {
   }
 
   if (!show) {
-    return <div>Loading...</div>; // Display loading while fetching data
+    return <div>Loading...</div>;
   }
 
   return (
@@ -34,13 +34,14 @@ const ShowDetails = () => {
       <p>{show.description}</p>
       <p>Last Updated: {new Date(show.updated).toLocaleDateString()}</p>
       <p>
-        Genres: {show.genres?.map((genre) => genre).join(', ') || 'N/A'}
+        Genres: {show.genres?.map((genre) => genre).join(", ") || "N/A"}
       </p>
       <div className="seasons">
+        {/* Changed to seasonId */}
         {Array.from({ length: show.seasons }, (_, index) => (
           <Link
             key={index + 1}
-            to={`/season/${index + 1}`}
+            to={`/season/${show.id}`} // Pass show.id as seasonId
             className="season-link"
           >
             Season {index + 1}

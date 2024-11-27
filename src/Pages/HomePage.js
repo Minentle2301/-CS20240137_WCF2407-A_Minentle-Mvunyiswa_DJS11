@@ -15,7 +15,7 @@ export const genreTitles = {
   9: 'Kids and Family',
 };
 
-const HomePage = () => {
+const HomePage = ({ favorites, addFavorite, removeFavorite }) => { // Added props here
   const [previews, setPreviews] = useState([]);
   const [filteredPreviews, setFilteredPreviews] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState('');
@@ -32,7 +32,7 @@ const HomePage = () => {
         setFilteredPreviews(sortedShows);
       })
       .catch((error) => console.error(error));
-  }, []);
+  }, [])
 
   // Handle genre selection change
   const handleGenreChange = (event) => {
@@ -104,7 +104,13 @@ const HomePage = () => {
       <div className={`podcast-grid ${animationClass}`}>
         {filteredPreviews.length > 0 ? (
           filteredPreviews.map((show) => (
-            <PodcastPreview key={show.id} show={show} />
+            <PodcastPreview
+              key={show.id}
+              show={show}
+              isFavorite={favorites.includes(show.id)}
+              addFavorite={addFavorite}
+              removeFavorite={removeFavorite}
+            />
           ))
         ) : (
           <p>No podcasts found for the selected genre or search query.</p>

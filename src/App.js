@@ -1,3 +1,4 @@
+// src/App.js
 import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from './Pages/HomePage';
@@ -30,13 +31,27 @@ const App = () => {
     localStorage.setItem('favorites', JSON.stringify(favorites));
   }, [favorites]);
 
+  // Function to add a show to favorites
+  const addFavorite = (showId) => {
+    setFavorites([...favorites, showId]);
+  };
+
+  // Function to remove a show from favorites
+  const removeFavorite = (showId) => {
+    setFavorites(favorites.filter((id) => id !== showId));
+  };
+
   return (
     <div className="app">
       <Routes>
         <Route
           path="/"
           element={
-            <HomePage favorites={favorites} setFavorites={setFavorites} />
+            <HomePage 
+              favorites={favorites} 
+              addFavorite={addFavorite} 
+              removeFavorite={removeFavorite} 
+            />
           }
         />
         <Route path="/genre/:id" element={<GenrePage />} />
