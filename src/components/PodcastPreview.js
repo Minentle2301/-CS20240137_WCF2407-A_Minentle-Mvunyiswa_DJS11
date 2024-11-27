@@ -30,9 +30,6 @@ const PodcastPreview = ({
     >
       <img src={show.image} alt={show.title} className="podcast-image" />
       <h3>{show.title}</h3>
-      <p>{show.description}</p>
-      <p className="genre">Genre: {genreTitles[show.genre_id]}</p>
-     
     </div>
   );
 };
