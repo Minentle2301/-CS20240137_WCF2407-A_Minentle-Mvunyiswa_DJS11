@@ -4,33 +4,44 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const EpisodePage = () => {
-  const { episodeId } = useParams();  // Get episode ID from URL
-  const [episode, setEpisode] = useState(null);
+  const { id } = useParams(); // Get seasonId from URL
+  const [episodes, setEpisodes] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch episode details using the episode ID
+    // Fetch episodes for the given season ID
     axios
-      .get(`https://podcast-api.netlify.app/episode/${episodeId}`)
+      .get(`https://podcast-api.netlify.app/season/${id}`)
       .then((response) => {
-        setEpisode(response.data);
+        setEpisodes(response.data); // API returns an array of episodes
       })
       .catch((error) => {
         console.error('Error fetching episode details:', error);
+        setError('Failed to load episodes. Please try again later.');
       });
-  }, [episodeId]);
+  }, [id]);
 
-  if (!episode) {
-    return <div>Loading...</div>;  // Loading state
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!episodes.length) {
+    return <div>Loading...</div>;
   }
 
   return (
-    <div className="episode-details">
-      <h2>{episode.title}</h2>
-      <p>{episode.description}</p>
-      <audio controls>
-        <source src={episode.audio_url} type="audio/mp3" />
-        Your browser does not support the audio element.
-      </audio>
+    <div className="episodes-list">
+      <h2>Season {id} Episodes</h2>
+      {episodes.map((episode) => (
+        <div key={episode.id} className="episode-details">
+          <h3>{episode.title}</h3>
+          <p>{episode.description}</p>
+          <audio controls>
+            <source src={episode.audio_url} type="audio/mp3" />
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+      ))}
     </div>
   );
 };

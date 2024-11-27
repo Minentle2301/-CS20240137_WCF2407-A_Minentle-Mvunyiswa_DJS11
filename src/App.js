@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from './Pages/HomePage';
 import GenrePage from './Pages/GenrePage';
-import ShowPage from './Pages/ShowPage';
 import EpisodePage from './Pages/EpisodePage';
 import FavoritesPage from './Pages/FavoritesPage';
 import ShowDetails from './components/ShowDetails';
-import SeasonPage from './Pages/SeasonPage'
 import { fetchPreviews } from './utils/api';
 import './styles.css';
 
@@ -35,17 +33,24 @@ const App = () => {
   return (
     <div className="app">
       <Routes>
-        <Route path="/" element={<HomePage favorites={favorites} setFavorites={setFavorites} />} />
+        <Route
+          path="/"
+          element={
+            <HomePage favorites={favorites} setFavorites={setFavorites} />
+          }
+        />
         <Route path="/genre/:id" element={<GenrePage />} />
-        <Route path="/show/:id" element={<ShowPage />} />
         <Route path="/show/:id" element={<ShowDetails />} />
-        <Route path="/season/:seasonId" element={<SeasonPage />} />
-        <Route path="/episode/:id" element={<EpisodePage />} />
-        <Route path="/favorites" element={<FavoritesPage favorites={favorites} previews={previews} />} />
+        <Route path="/season/:id" element={<EpisodePage />} />
+        <Route
+          path="/favorites"
+          element={
+            <FavoritesPage favorites={favorites} previews={previews} />
+          }
+        />
       </Routes>
     </div>
   );
 };
 
 export default App;
-
