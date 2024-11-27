@@ -1,4 +1,4 @@
-// SeasonPage.js - Displays details for a specific season of a podcast
+// SeasonPage.js - 
 
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
