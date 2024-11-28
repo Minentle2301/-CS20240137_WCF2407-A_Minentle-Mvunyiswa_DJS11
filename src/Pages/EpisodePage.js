@@ -1,10 +1,10 @@
-// EpisodePage.js
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+
 
 const EpisodePage = () => {
-  const { id } = useParams(); // Get seasonId from URL
+  const { id } = useParams(); // Get season ID from URL
   const [episodes, setEpisodes] = useState([]);
   const [error, setError] = useState(null);
 
@@ -13,11 +13,11 @@ const EpisodePage = () => {
     axios
       .get(`https://podcast-api.netlify.app/season/${id}`)
       .then((response) => {
-        setEpisodes(response.data); // API returns an array of episodes
+        setEpisodes(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching episode details:', error);
-        setError('Failed to load episodes. Please try again later.');
+        console.error("Error fetching episodes:", error);
+        setError("Failed to load episodes. Please try again later.");
       });
   }, [id]);
 
@@ -47,6 +47,7 @@ const EpisodePage = () => {
 };
 
 export default EpisodePage;
+
 
 
 
