@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'; 
 import { fetchPreviews } from '../utils/api';
 import PodcastPreview from '../components/PodcastPreview';
 import './HomePage.css';
@@ -15,12 +15,13 @@ export const genreTitles = {
   9: 'Kids and Family',
 };
 
-const HomePage = ({ favorites, addFavorite, removeFavorite }) => { // Added props here
+const HomePage = ({ favorites, addFavorite, removeFavorite }) => {
   const [previews, setPreviews] = useState([]);
   const [filteredPreviews, setFilteredPreviews] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [animationClass, setAnimationClass] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc'); // New state for sort order
 
   useEffect(() => {
     fetchPreviews()
@@ -32,7 +33,7 @@ const HomePage = ({ favorites, addFavorite, removeFavorite }) => { // Added prop
         setFilteredPreviews(sortedShows);
       })
       .catch((error) => console.error(error));
-  }, [])
+  }, []);
 
   // Handle genre selection change
   const handleGenreChange = (event) => {
@@ -64,11 +65,27 @@ const HomePage = ({ favorites, addFavorite, removeFavorite }) => { // Added prop
       );
     }
 
+    // Apply current sort order
+    if (sortOrder === 'asc') {
+      filtered = filtered.sort((a, b) => a.title.localeCompare(b.title));
+    } else {
+      filtered = filtered.sort((a, b) => b.title.localeCompare(a.title));
+    }
+
     // Trigger slide-in animation
     setAnimationClass('animate-slide');
     setTimeout(() => setAnimationClass(''), 500); // Remove animation class after animation ends
 
     setFilteredPreviews(filtered);
+  };
+
+  // Handle sorting
+  const handleSort = (order) => {
+    setSortOrder(order);
+    const sorted = [...filteredPreviews].sort((a, b) =>
+      order === 'asc' ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title)
+    );
+    setFilteredPreviews(sorted);
   };
 
   return (
@@ -100,6 +117,16 @@ const HomePage = ({ favorites, addFavorite, removeFavorite }) => { // Added prop
         />
       </div>
 
+      {/* Sorting Buttons */}
+      <div className="sorting">
+        <button onClick={() => handleSort('asc')} className={sortOrder === 'asc' ? 'active' : ''}>
+          Sort A-Z
+        </button>
+        <button onClick={() => handleSort('desc')} className={sortOrder === 'desc' ? 'active' : ''}>
+          Sort Z-A
+        </button>
+      </div>
+
       {/* Podcast Grid */}
       <div className={`podcast-grid ${animationClass}`}>
         {filteredPreviews.length > 0 ? (
@@ -113,7 +140,7 @@ const HomePage = ({ favorites, addFavorite, removeFavorite }) => { // Added prop
             />
           ))
         ) : (
-          <p>Loading...</p>
+          <p>No podcasts available.</p>
         )}
       </div>
     </div>
