@@ -54,6 +54,7 @@ const ShowDetails = ({ favorites, addFavorite, removeFavorite }) => {
               <h3>{episode.title}</h3>
               <p>{episode.description}</p>
             </Link>
+            
           ))
         ) : (
           <p></p>

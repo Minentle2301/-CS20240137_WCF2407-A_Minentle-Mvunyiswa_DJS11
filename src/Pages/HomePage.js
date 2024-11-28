@@ -140,7 +140,7 @@ const HomePage = ({ favorites, addFavorite, removeFavorite }) => {
             />
           ))
         ) : (
-          <p>No podcasts available.</p>
+          <p>Loading...</p>
         )}
       </div>
     </div>
