@@ -54,12 +54,27 @@ const ShowDetails = ({ favorites, addFavorite, removeFavorite }) => {
               <h3>{episode.title}</h3>
               <p>{episode.description}</p>
             </Link>
-            
+
           ))
         ) : (
           <p></p>
         )}
       </div>
+      <div className="seasons">
+    {show.seasons && show.seasons.length > 0 ? (
+      show.seasons.map((season) => (
+        <Link
+          key={season.id}
+          to={`/season/${season.id}`}
+          className="season-link"
+        >
+          Season {season.number} (Episodes: {season.episodes.length})
+        </Link>
+      ))
+    ) : (
+      <p>No seasons available for this show.</p>
+    )}
+  </div>
 
       <Link to="/favorites">
     <button onClick={handleFavoriteToggle}>
