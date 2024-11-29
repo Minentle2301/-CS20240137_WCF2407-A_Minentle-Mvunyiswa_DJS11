@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'; 
-import { fetchPreviews } from '../utils/api';
-import PodcastPreview from '../components/PodcastPreview';
-import './HomePage.css';
+import React, { useEffect, useState } from 'react'; // Importing React and hooks
+import { fetchPreviews } from '../utils/api'; // API utility function to fetch podcast previews
+import PodcastPreview from '../components/PodcastPreview'; // Component to display individual podcast preview
+import './HomePage.css'; // Styles for the HomePage component
 
+// Genre mapping for filtering podcasts
 export const genreTitles = {
   1: 'Personal Growth',
   2: 'Investigative Journalism',
@@ -16,83 +17,98 @@ export const genreTitles = {
 };
 
 const HomePage = ({ favorites, addFavorite, removeFavorite }) => {
+  // State to store all podcast previews fetched from the API
   const [previews, setPreviews] = useState([]);
-  const [filteredPreviews, setFilteredPreviews] = useState([]);
-  const [selectedGenre, setSelectedGenre] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [animationClass, setAnimationClass] = useState('');
-  const [sortOrder, setSortOrder] = useState('asc'); // New state for sort order
 
+  // State to store filtered podcast previews based on user inputs
+  const [filteredPreviews, setFilteredPreviews] = useState([]);
+
+  // State to track the selected genre for filtering
+  const [selectedGenre, setSelectedGenre] = useState('');
+
+  // State to track the user's search query
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // State to add animation classes for smooth UI transitions
+  const [animationClass, setAnimationClass] = useState('');
+
+  // State to manage the sorting order (ascending or descending)
+  const [sortOrder, setSortOrder] = useState('asc');
+
+  // Fetch podcast previews when the component mounts
   useEffect(() => {
     fetchPreviews()
       .then((response) => {
+        // Sort podcasts alphabetically by title (default: ascending)
         const sortedShows = response.data.sort((a, b) =>
           a.title.localeCompare(b.title)
         );
-        setPreviews(sortedShows);
-        setFilteredPreviews(sortedShows);
+        setPreviews(sortedShows); // Save fetched and sorted podcasts
+        setFilteredPreviews(sortedShows); // Initialize filtered previews with all podcasts
       })
-      .catch((error) => console.error(error));
+      .catch((error) => console.error(error)); // Handle errors in fetching data
   }, []);
 
-  // Handle genre selection change
+  // Handle changes in the genre filter dropdown
   const handleGenreChange = (event) => {
-    const genreId = event.target.value;
-    setSelectedGenre(genreId);
-    filterPodcasts(genreId, searchQuery);
+    const genreId = event.target.value; // Get the selected genre ID
+    setSelectedGenre(genreId); // Update the selected genre state
+    filterPodcasts(genreId, searchQuery); // Filter podcasts based on genre and search query
   };
 
-  // Handle search input change
+  // Handle user input in the search bar
   const handleSearchChange = (event) => {
-    const query = event.target.value.toLowerCase();
-    setSearchQuery(query);
-    filterPodcasts(selectedGenre, query);
+    const query = event.target.value.toLowerCase(); // Convert input to lowercase for case-insensitive matching
+    setSearchQuery(query); // Update the search query state
+    filterPodcasts(selectedGenre, query); // Filter podcasts based on genre and search query
   };
 
-  // Filter podcasts based on genre and search query
+  // Filter podcasts based on the selected genre and search query
   const filterPodcasts = (genreId, query) => {
-    let filtered = previews;
+    let filtered = previews; // Start with all podcasts
 
     if (genreId) {
+      // Filter by genre if a genre is selected
       filtered = filtered.filter((show) =>
         show.genres.includes(parseInt(genreId))
       );
     }
 
     if (query) {
+      // Filter by search query if input is provided
       filtered = filtered.filter((show) =>
         show.title.toLowerCase().includes(query)
       );
     }
 
-    // Apply current sort order
+    // Sort podcasts based on the current sorting order
     if (sortOrder === 'asc') {
       filtered = filtered.sort((a, b) => a.title.localeCompare(b.title));
     } else {
       filtered = filtered.sort((a, b) => b.title.localeCompare(a.title));
     }
 
-    // Trigger slide-in animation
+    // Trigger animation for UI updates
     setAnimationClass('animate-slide');
-    setTimeout(() => setAnimationClass(''), 500); // Remove animation class after animation ends
+    setTimeout(() => setAnimationClass(''), 500); // Reset animation class after animation ends
 
-    setFilteredPreviews(filtered);
+    setFilteredPreviews(filtered); // Update filtered previews with the new filtered list
   };
 
-  // Handle sorting
+  // Handle sorting podcasts alphabetically (ascending or descending)
   const handleSort = (order) => {
-    setSortOrder(order);
+    setSortOrder(order); // Update sorting order state
     const sorted = [...filteredPreviews].sort((a, b) =>
       order === 'asc' ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title)
     );
-    setFilteredPreviews(sorted);
+    setFilteredPreviews(sorted); // Update filtered previews with sorted list
   };
 
   return (
     <div className="home-page">
-      <h1>Podcasts</h1>
+      <h1>The Pods Joy</h1>
 
-      {/* Genre Filter Dropdown */}
+      {/* Genre filter dropdown */}
       <div className="filter">
         <label htmlFor="genre">Filter by Genre: </label>
         <select id="genre" value={selectedGenre} onChange={handleGenreChange}>
@@ -105,7 +121,7 @@ const HomePage = ({ favorites, addFavorite, removeFavorite }) => {
         </select>
       </div>
 
-      {/* Search Input */}
+      {/* Search input field */}
       <div className="search">
         <label htmlFor="search">Search: </label>
         <input
@@ -117,30 +133,36 @@ const HomePage = ({ favorites, addFavorite, removeFavorite }) => {
         />
       </div>
 
-      {/* Sorting Buttons */}
+      {/* Sorting buttons */}
       <div className="sorting">
-        <button onClick={() => handleSort('asc')} className={sortOrder === 'asc' ? 'active' : ''}>
+        <button
+          onClick={() => handleSort('asc')}
+          className={sortOrder === 'asc' ? 'active' : ''}
+        >
           Sort A-Z
         </button>
-        <button onClick={() => handleSort('desc')} className={sortOrder === 'desc' ? 'active' : ''}>
+        <button
+          onClick={() => handleSort('desc')}
+          className={sortOrder === 'desc' ? 'active' : ''}
+        >
           Sort Z-A
         </button>
       </div>
 
-      {/* Podcast Grid */}
+      {/* Podcast previews grid */}
       <div className={`podcast-grid ${animationClass}`}>
         {filteredPreviews.length > 0 ? (
           filteredPreviews.map((show) => (
             <PodcastPreview
               key={show.id}
-              show={show}
-              isFavorite={favorites.includes(show.id)}
-              addFavorite={addFavorite}
-              removeFavorite={removeFavorite}
+              show={show} // Pass podcast details to the preview component
+              isFavorite={favorites.includes(show.id)} // Determine if the podcast is in the favorites list
+              addFavorite={addFavorite} // Function to add a podcast to favorites
+              removeFavorite={removeFavorite} // Function to remove a podcast from favorites
             />
           ))
         ) : (
-          <p>Loading...</p>
+          <p>Loading...</p> // Display a loading message while data is being fetched
         )}
       </div>
     </div>
@@ -148,5 +170,6 @@ const HomePage = ({ favorites, addFavorite, removeFavorite }) => {
 };
 
 export default HomePage;
+
 
 
