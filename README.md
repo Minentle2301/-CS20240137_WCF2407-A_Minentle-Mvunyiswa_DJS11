@@ -40,7 +40,8 @@ Click on a podcast to view its details, including seasons and episodes.
 Audio Player:
 
 Play or pause an episode using the embedded audio player.
-Favorites:
+
+HERE IS MY NETLIFY LINK : https://the-joys-podcast.netlify.app/
 
 Add episodes to your favorites for quick access.
 View and manage your favorite episodes on the Favorites page.
