@@ -1,3 +1,4 @@
+// App.js
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import HomePage from './Pages/HomePage';
@@ -9,32 +10,30 @@ import { fetchPreviews } from './utils/api';
 import './styles.css';
 
 const App = () => {
-    const [favorites, setFavorites] = useState(() => {
-        const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        return savedFavorites; 
-    });
-
+    const [favorites, setFavorites] = useState(
+        JSON.parse(localStorage.getItem('favorites')) || []
+    );
     const [favoriteEpisodes, setFavoriteEpisodes] = useState([]);
     const [previews, setPreviews] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchPreviews() 
+        fetchPreviews()
             .then((response) => {
-                setPreviews(response.data); 
+                setPreviews(response.data);
             })
             .catch((error) => {
-                console.error('Error fetching previews:', error); 
+                console.error('Error fetching previews:', error);
             });
-    }, []); 
+    }, []);
 
     useEffect(() => {
-        localStorage.setItem('favorites', JSON.stringify(favorites)); 
-    }, [favorites]); 
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+    }, [favorites]);
 
     const handleFavorite = (showId) => {
         setFavorites((prevFavorites) => {
-            const isFavorite = prevFavorites.includes(showId); 
+            const isFavorite = prevFavorites.includes(showId);
             if (isFavorite) {
                 return prevFavorites.filter((id) => id !== showId);
             } else {
@@ -45,16 +44,16 @@ const App = () => {
 
     const handleToggleFavorite = (episodeData) => {
         setFavoriteEpisodes((prevFavorites) => {
-            const isFavorite = prevFavorites.some(fav => 
-                fav.showId === episodeData.showId && 
-                fav.episodeTitle === episodeData.episodeTitle && 
+            const isFavorite = prevFavorites.some(fav =>
+                fav.showId === episodeData.showId &&
+                fav.episodeTitle === episodeData.episodeTitle &&
                 fav.seasonTitle === episodeData.seasonTitle
             );
             if (isFavorite) {
-                return prevFavorites.filter(fav => 
-                    !(fav.showId === episodeData.showId && 
-                      fav.episodeTitle === episodeData.episodeTitle && 
-                      fav.seasonTitle === episodeData.seasonTitle)
+                return prevFavorites.filter(fav =>
+                    !(fav.showId === episodeData.showId &&
+                        fav.episodeTitle === episodeData.episodeTitle &&
+                        fav.seasonTitle === episodeData.seasonTitle)
                 );
             } else {
                 const newFavorite = {

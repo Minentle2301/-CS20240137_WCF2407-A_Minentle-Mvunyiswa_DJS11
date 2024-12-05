@@ -1,3 +1,4 @@
+// PodcastDetailsModal.js
 import { useState, useEffect } from 'react';
 import {
     Modal,
@@ -48,16 +49,16 @@ const PodcastDetailsModal = ({ show, genres, open, onClose, onPlayEpisode, loadi
     };
 
     const isFavorite = (episode) => {
-        return favoriteEpisodes.some(fav => 
-            fav.showId === show.id && 
-            fav.episodeTitle === episode.title && 
+        return favoriteEpisodes.some(fav =>
+            fav.showId === show.id &&
+            fav.episodeTitle === episode.title &&
             fav.seasonTitle === selectedSeason.title
         );
     };
 
     const isListened = (episode) => {
-        return listenedEpisodes.some(listened => 
-            listened.showId === show.id && 
+        return listenedEpisodes.some(listened =>
+            listened.showId === show.id &&
             listened.episodeTitle === episode.title
         );
     };
@@ -70,6 +71,10 @@ const PodcastDetailsModal = ({ show, genres, open, onClose, onPlayEpisode, loadi
     const showGenres = genres.filter(genre =>
         genre.shows.includes(show.id)
     );
+
+    if (!show) {
+        return null; // Or a loading indicator
+    }
 
     return (
         <Modal
@@ -99,7 +104,7 @@ const PodcastDetailsModal = ({ show, genres, open, onClose, onPlayEpisode, loadi
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                         <CircularProgress />
                     </Box>
-                ) : show ? (
+                ) : (
                     <>
                         <Box sx={{ display: 'flex', mb: 2 }}>
                             <Box sx={{ width: '30%', mr: 2 }}>
@@ -126,8 +131,7 @@ const PodcastDetailsModal = ({ show, genres, open, onClose, onPlayEpisode, loadi
                                     )}
                                 </Box>
                                 <Box>
-                                    <Typography variant="body2" 
-                                    sx={{ mb: 2 }}>
+                                    <Typography variant="body2" sx={{ mb: 2 }}>
                                         Updated: {(new Date(show.updated)).toLocaleString(undefined, {
                                             year: 'numeric',
                                             month: 'long',
@@ -202,8 +206,6 @@ const PodcastDetailsModal = ({ show, genres, open, onClose, onPlayEpisode, loadi
                         </Box>
                         <Button onClick={onClose} sx={{ mt: 2 }}>Close</Button>
                     </>
-                ) : (
-                    <Typography>Failed to load show details.</Typography>
                 )}
             </Box>
         </Modal>
