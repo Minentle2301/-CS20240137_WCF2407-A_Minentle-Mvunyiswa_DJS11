@@ -11,15 +11,12 @@ import {
     List,
     ListItem,
     ListItemText,
-    ListItemSecondaryAction,
-    IconButton,
+  
     Chip,
 } from '@mui/material';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+
 import PropTypes from 'prop-types';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+
 
 const PodcastDetailsModal = ({ show, genres, open, onClose, onPlayEpisode, loading, toggleFavorite, favoriteEpisodes, listenedEpisodes, episodeTimestamps }) => {
     const [selectedSeason, setSelectedSeason] = useState(null);
@@ -121,15 +118,7 @@ const PodcastDetailsModal = ({ show, genres, open, onClose, onPlayEpisode, loadi
                                 <Typography variant="body2" sx={{ mb: 2, maxHeight: '100px', overflow: 'auto' }}>
                                     {show.description}
                                 </Typography>
-                                <Box sx={{ mb: 2 }}>
-                                    {showGenres.length > 0 ? (
-                                        showGenres.map((genre) => (
-                                            <Chip key={genre.id} label={genre.title} sx={{ mr: 1, mb: 1 }} />
-                                        ))
-                                    ) : (
-                                        <Typography>No genres available</Typography>
-                                    )}
-                                </Box>
+                                
                                 <Box>
                                     <Typography variant="body2" sx={{ mb: 2 }}>
                                         Updated: {(new Date(show.updated)).toLocaleString(undefined, {
@@ -176,9 +165,7 @@ const PodcastDetailsModal = ({ show, genres, open, onClose, onPlayEpisode, loadi
                             <List>
                                 {selectedSeason && selectedSeason.episodes.map((episode) => (
                                     <ListItem key={episode.episode} divider>
-                                        <IconButton onClick={() => handleToggleFavorite(episode)}>
-                                            {isFavorite(episode) ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                                        </IconButton>
+                                        
                                         <ListItemText
                                             primary={`Episode ${episode.episode}: ${episode.title}`}
                                             secondary={
@@ -192,14 +179,7 @@ const PodcastDetailsModal = ({ show, genres, open, onClose, onPlayEpisode, loadi
                                                 </>
                                             }
                                         />
-                                        <ListItemSecondaryAction>
-                                            {isListened(episode) && (
-                                                <CheckCircleIcon color="primary" sx={{ mr: 1 }} />
-                                            )}
-                                            <IconButton edge="end" aria-label="play" onClick={() => onPlayEpisode(episode)}>
-                                                <PlayArrowIcon />
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
+                                        
                                     </ListItem>
                                 ))}
                             </List>
