@@ -3,16 +3,23 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import PropTypes from "prop-types";
 import EpisodePlayer from "./EpisodePlayer";
+import PodcastDetailsModal from "./PodcastDetailsModal"; 
 import "./ShowDetails.css";
 
 const ShowDetails = ({ favorites, addFavorite, removeFavorite }) => {
-    const { id } = useParams(); // Get the `id` parameter from the URL
+    const { id } = useParams(); 
     const navigate = useNavigate();
     
     const [show, setShow] = useState(null);
     const [episodes, setEpisodes] = useState([]);
     const [selectedSeason, setSelectedSeason] = useState(1);
     const [error, setError] = useState(null);
+    const [modalOpen, setModalOpen] = 
+    useState(false); 
+    const [genres, setGenres] = useState([]); 
+    const [favoriteEpisodes, setFavoriteEpisodes] = useState([]); 
+    const [listenedEpisodes, setListenedEpisodes] = useState([]);
+    const [episodeTimestamps, setEpisodeTimestamps] = useState({}); 
 
     useEffect(() => {
         const fetchShowData = async () => {
@@ -20,7 +27,6 @@ const ShowDetails = ({ favorites, addFavorite, removeFavorite }) => {
                 const response = await axios.get(`https://podcast-api.netlify.app/id/${id}`);
                 setShow(response.data);
 
-                // Set episodes for the first season or the selected season
                 if (response.data.seasons?.length > 0) {
                     setEpisodes(response.data.seasons[selectedSeason - 1]?.episodes || []);
                 }
@@ -29,26 +35,64 @@ const ShowDetails = ({ favorites, addFavorite, removeFavorite }) => {
             }
         };
 
+        const fetchGenres = async () => {
+            try {
+                const response = await axios.get('https://podcast-api.netlify.app/genres');
+                setGenres(response.data);
+            } catch (err) {
+                console.error("Failed to load genres:", err); 
+            }
+        };
+
         fetchShowData();
+        fetchGenres(); 
     }, [id, selectedSeason]);
 
     const handleSeasonChange = (seasonNumber) => {
         setSelectedSeason(seasonNumber);
-        setEpisodes(show.seasons[seasonNumber - 1]?.episodes || []);
+        setEpisodes(show?.seasons[seasonNumber - 1]?.episodes || []);
     };
 
-    const handleFavoriteToggle = (episodeId) => {
-        const episodeIndex = episodes.findIndex((episode) => episode.id === episodeId);
-        if (episodeIndex !== -1) {
-            const updatedEpisodes = [...episodes];
-            updatedEpisodes[episodeIndex].isFavorite = !updatedEpisodes[episodeIndex].isFavorite;
-            setEpisodes(updatedEpisodes);
-            if (updatedEpisodes[episodeIndex].isFavorite) {
-                addFavorite(episodeId);
-            } else {
-                removeFavorite(episodeId);
-            }
+    const handleOpenModal = () => {
+        setModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setModalOpen(false);
+    };
+
+    const handlePlayEpisode = (episode) => {
+        console.log("Playing episode:", episode.title);
+    };
+
+    const handleToggleFavorite = (episodeData) => {
+        if (isFavorite(episodeData)) {
+            setFavoriteEpisodes(favoriteEpisodes.filter(fav => 
+                !(fav.showId === episodeData.showId && 
+                  fav.episodeTitle === episodeData.episodeTitle && 
+                  fav.seasonTitle === episodeData.seasonTitle)
+            ));
+            removeFavorite({ 
+                showId: episodeData.showId,
+                episodeTitle: episodeData.episodeTitle,
+                seasonTitle: episodeData.seasonTitle
+            });
+        } else {
+            setFavoriteEpisodes([...favoriteEpisodes, episodeData]);
+            addFavorite({
+                showId: episodeData.showId,
+                episodeTitle: episodeData.episodeTitle,
+                seasonTitle: episodeData.seasonTitle
+            });
         }
+    };
+
+    const isFavorite = (episode) => {
+        return favoriteEpisodes.some(fav => 
+            fav.showId === show?.id && 
+            fav.episodeTitle === episode.title && 
+            fav.seasonTitle === show?.seasons[selectedSeason - 1]?.title 
+        );
     };
 
     if (error) {
@@ -71,7 +115,7 @@ const ShowDetails = ({ favorites, addFavorite, removeFavorite }) => {
 
             <div className="seasons">
                 {show.seasons.map((season, index) => (
-                    <button key={index} onClick={() => handleSeasonChange(index + 1)}>
+                    <button key={index} onClick={() => handleSeasonChange(index + 1)}>  
                         Season {index + 1}
                     </button>
                 ))}
@@ -79,10 +123,28 @@ const ShowDetails = ({ favorites, addFavorite, removeFavorite }) => {
 
             <div>
                 <h3>Season {selectedSeason} Episodes</h3>
-                <EpisodePlayer episodes={episodes} onFavoriteToggle={handleFavoriteToggle} />
+                <EpisodePlayer 
+                    episodes={episodes} 
+                    onFavoriteToggle={handleToggleFavorite} 
+                    favoriteEpisodes={favoriteEpisodes} 
+                /> 
             </div>
 
-            {/* Add/remove favorite button for the show */}
+            <button onClick={handleOpenModal}>Show Details</button> 
+
+            <PodcastDetailsModal 
+                show={show} 
+                genres={genres} 
+                open={modalOpen} 
+                onClose={handleCloseModal} 
+                onPlayEpisode={handlePlayEpisode} 
+                loading={!show}  
+                toggleFavorite={handleToggleFavorite}
+                favoriteEpisodes={favoriteEpisodes}
+                listenedEpisodes={listenedEpisodes}
+                episodeTimestamps={episodeTimestamps}
+            />
+
             <Link to="/favorites">
                 <button onClick={() => navigate("/favorites")}>
                     View Favorites
@@ -93,9 +155,10 @@ const ShowDetails = ({ favorites, addFavorite, removeFavorite }) => {
 };
 
 ShowDetails.propTypes = {
-    favorites: PropTypes.array.isRequired, // Favorites must be an array
-    addFavorite: PropTypes.func.isRequired, // Function to add an episode to favorites
-    removeFavorite: PropTypes.func.isRequired, // Function to remove an episode from favorites
+    favorites: PropTypes.array.isRequired, 
+    addFavorite: PropTypes.func.isRequired, 
+    removeFavorite: PropTypes.func 
+.isRequired,
 };
 
 export default ShowDetails;
