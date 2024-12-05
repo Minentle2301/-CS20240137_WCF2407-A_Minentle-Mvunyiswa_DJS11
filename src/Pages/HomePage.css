@@ -120,13 +120,24 @@
   .sorting button {
     margin: 0 5px;
     padding: 8px 16px;
-    border: 1px solid #ccc;
-    background-color: #a15f5f;
     cursor: pointer;
-  }
-  
-  .sorting button.active {
-    background-color: #007bff;
-    color: white;
-  }
-  
+    border: none;
+    border-radius: 8px; /* Rounded corners */
+    background: linear-gradient(45deg, #6a11cb 30%, #2575fc 90%); /* Gradient colors */
+    color: white; /* Text color */
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: all 0.3s ease; /* Smooth transition for hover */
+}
+
+.sorting button:hover {
+    background: linear-gradient(45deg, #2575fc 30%, #6a11cb 90%); /* Reverse gradient on hover */
+    transform: scale(1.05); /* Slightly increase size on hover */
+}
+
+.sorting button.active {
+    background: linear-gradient(45deg, #ff8a00 30%, #da1b60 90%); /* Active state gradient */
+    color: white; /* Ensure text is visible */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+}

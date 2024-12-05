@@ -72,7 +72,24 @@ const FavoritesPage = ({ favoriteEpisodes, toggleFavorite, onBackToShows }) => {
                 <Typography variant="h4" gutterBottom>
                     Your Favorite Episodes
                 </Typography>
-                <Button variant="outlined" onClick={onBackToShows}>
+                <Button
+                    variant="outlined"
+                    onClick={onBackToShows}
+                    sx={{
+                        background: 'linear-gradient(45deg, #6a11cb 30%, #2575fc 90%)',
+                        color: 'white',
+                        fontWeight: 'bold',
+                        padding: '8px 16px',
+                        border: 'none',
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                            background: 'linear-gradient(45deg, #2575fc 30%, #6a11cb 90%)',
+                            transform: 'scale(1.05)',
+                        },
+                    }}
+                >
                     Back to Shows
                 </Button>
             </Box>
@@ -99,64 +116,87 @@ const FavoritesPage = ({ favoriteEpisodes, toggleFavorite, onBackToShows }) => {
                 </Select>
             </Box>
 
-            {/* Sorted and Filtered Favorites List */}
-            <List>
-                {sortedFavorites.map((fav, index) => (
-                    <React.Fragment key={`${fav.showId}-${fav.episodeTitle}`}>
-                        <ListItem>
-                            <ListItemText
-                                primary={fav.showTitle}
-                                secondary={`${fav.seasonTitle} - Episode ${fav.episodeNumber} - ${fav.episodeTitle}`}
-                            />
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    textAlign: 'end',
-                                    whiteSpace: 'nowrap',
-                                }}
-                            >
+            {/* Conditional Rendering for No Episodes */}
+            {sortedFavorites.length === 0 ? (
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '50vh',
+                        flexDirection: 'column',
+                    }}
+                >
+                    <Typography variant="h6" color="textSecondary">
+                        NO EPISODES ADDED YET
+                    </Typography>
+                </Box>
+            ) : (
+                <List>
+                    {sortedFavorites.map((fav, index) => (
+                        <React.Fragment key={`${fav.showId}-${fav.episodeTitle}`}>
+                            <ListItem>
                                 <ListItemText
-                                    secondary={
-                                        'Added: ' +
-                                        new Date(fav.savedAt).toLocaleString(undefined, {
-                                            year: 'numeric',
-                                            month: 'long',
-                                            day: 'numeric',
-                                            hour: '2-digit',
-                                            minute: '2-digit',
-                                            hour12: false,
-                                        })
-                                    }
+                                    primary={fav.showTitle}
+                                    secondary={`${fav.seasonTitle} - Episode ${fav.episodeNumber} - ${fav.episodeTitle}`}
                                 />
-                                <ListItemText
-                                    secondary={
-                                        'Updated: ' +
-                                        new Date(fav.updated).toLocaleString(undefined, {
-                                            year: 'numeric',
-                                            month: 'long',
-                                            day: 'numeric',
-                                            hour: '2-digit',
-                                            minute: '2-digit',
-                                            hour12: false,
-                                        })
-                                    }
-                                />
-                                <IconButton
-                                    edge="end"
-                                    aria-label="delete"
-                                    onClick={() => handleRemoveFavorite(fav)}
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        textAlign: 'end',
+                                        whiteSpace: 'nowrap',
+                                    }}
                                 >
-                                    <DeleteIcon />
-                                </IconButton>
-                            </Box>
-                        </ListItem>
-                        {index < sortedFavorites.length - 1 && <Divider />}
-                    </React.Fragment>
-                ))}
-            </List>
+                                    <ListItemText
+                                        secondary={
+                                            'Added: ' +
+                                            new Date(fav.savedAt).toLocaleString(undefined, {
+                                                year: 'numeric',
+                                                month: 'long',
+                                                day: 'numeric',
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                                hour12: false,
+                                            })
+                                        }
+                                    />
+                                    <ListItemText
+                                        secondary={
+                                            'Updated: ' +
+                                            new Date(fav.updated).toLocaleString(undefined, {
+                                                year: 'numeric',
+                                                month: 'long',
+                                                day: 'numeric',
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                                hour12: false,
+                                            })
+                                        }
+                                    />
+                                   <IconButton
+    edge="end"
+    aria-label="delete"
+    onClick={() => handleRemoveFavorite(fav)}
+    sx={{
+        color: 'red', // Set the color of the button to red
+        '&:hover': {
+            backgroundColor: 'rgba(255, 0, 0, 0.1)', // Optional hover effect
+        },
+    }}
+>
+    <DeleteIcon />
+</IconButton>
+
+                                </Box>
+                            </ListItem>
+                            {index < sortedFavorites.length - 1 && <Divider />}
+                        </React.Fragment>
+                    ))}
+                </List>
+            )}
         </Box>
     );
 };
