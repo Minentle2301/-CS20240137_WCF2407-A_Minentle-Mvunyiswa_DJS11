@@ -1,66 +1,75 @@
-import React, { useEffect, useState } from 'react';
+// Import necessary modules from React and Material UI
+import React, { useEffect, useState } from 'react'; // Import React, useState, and useEffect hooks
 import {
-    Box,
-    Typography,
-    Button,
-    IconButton,
-    List,
-    ListItem,
-    ListItemText,
-    Divider,
-    TextField,
-    Select,
-    MenuItem,
-} from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import {
-    sortByTitleAscending,
-    sortByTitleDescending,
-    sortByDateAscending,
-    sortByDateDescending,
-} from '../utils/sortUtils';
-import PropTypes from 'prop-types';
+    Box, // Box component for layout and styling
+    Typography, // Typography for text styling
+    Button, // Button component
+    IconButton, // IconButton for clickable icons
+    List, // List component to display a list of items
+    ListItem, // ListItem to define individual items in the list
+    ListItemText, // ListItemText to display text inside ListItem
+    Divider, // Divider to separate list items
+    TextField, // TextField for input (search bar)
+    Select, // Select component for dropdown
+    MenuItem, // MenuItem for options in the Select dropdown
+} from '@mui/material'; // Import Material UI components
 
+import DeleteIcon from '@mui/icons-material/Delete'; // Import the delete icon
+import {
+    sortByTitleAscending, // Function to sort items by title in ascending order
+    sortByTitleDescending, // Function to sort items by title in descending order
+    sortByDateAscending, // Function to sort items by date in ascending order
+    sortByDateDescending, // Function to sort items by date in descending order
+} from '../utils/sortUtils'; // Import sorting utility functions
+
+import PropTypes from 'prop-types'; // Import PropTypes to validate component props
+
+// FavoritesPage component to display a list of favorite episodes
 const FavoritesPage = ({ favoriteEpisodes, toggleFavorite, onBackToShows }) => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [sortOption, setSortOption] = useState('newest');
-    const [sortedFavorites, setSortedFavorites] = useState([]);
+    // State variables for managing the search query, sorting option, and sorted favorites
+    const [searchQuery, setSearchQuery] = useState(''); // State for search input
+    const [sortOption, setSortOption] = useState('newest'); // State for sorting option (newest, A-Z, etc.)
+    const [sortedFavorites, setSortedFavorites] = useState([]); // State to store the sorted list of favorite episodes
 
+    // useEffect hook to handle filtering and sorting when favoriteEpisodes, searchQuery, or sortOption change
     useEffect(() => {
-        // Filter episodes based on search query
+        // Filter the favorite episodes based on the search query
         let filtered = favoriteEpisodes.filter((fav) =>
             fav.showTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
             fav.episodeTitle.toLowerCase().includes(searchQuery.toLowerCase())
         );
 
-        // Sort episodes based on sort option
+        // Sorting the filtered episodes based on the selected sortOption
         let sorted;
         switch (sortOption) {
             case 'A-Z':
-                sorted = sortByTitleAscending(filtered, 'showTitle');
+                sorted = sortByTitleAscending(filtered, 'showTitle'); // Sort by title ascending
                 break;
             case 'Z-A':
-                sorted = sortByTitleDescending(filtered, 'showTitle');
+                sorted = sortByTitleDescending(filtered, 'showTitle'); // Sort by title descending
                 break;
             case 'newest':
-                sorted = sortByDateDescending(filtered, 'updated');
+                sorted = sortByDateDescending(filtered, 'updated'); // Sort by newest (based on updated date)
                 break;
             case 'oldest':
-                sorted = sortByDateAscending(filtered, 'updated');
+                sorted = sortByDateAscending(filtered, 'updated'); // Sort by oldest (based on updated date)
                 break;
             default:
-                sorted = filtered;
+                sorted = filtered; // Default: no sorting
         }
 
-        setSortedFavorites(sorted);
-    }, [favoriteEpisodes, searchQuery, sortOption]);
+        setSortedFavorites(sorted); // Set the sorted favorites in the state
+    }, [favoriteEpisodes, searchQuery, sortOption]); // Dependency array ensures effect runs when any of these variables change
 
+    // Function to handle removing an episode from favorites
     const handleRemoveFavorite = (episode) => {
-        toggleFavorite(episode);
+        toggleFavorite(episode); // Call toggleFavorite function passed as prop to remove the episode
     };
 
+    // Render the FavoritesPage component
     return (
         <Box sx={{ padding: 2, mt: '4rem', mb: '6rem' }}>
+            {/* Header and Back to Shows button */}
             <Box
                 sx={{
                     display: 'flex',
@@ -74,7 +83,7 @@ const FavoritesPage = ({ favoriteEpisodes, toggleFavorite, onBackToShows }) => {
                 </Typography>
                 <Button
                     variant="outlined"
-                    onClick={onBackToShows}
+                    onClick={onBackToShows} // Navigate back to shows page
                     sx={{
                         background: 'linear-gradient(45deg, #6a11cb 30%, #2575fc 90%)',
                         color: 'white',
@@ -86,7 +95,7 @@ const FavoritesPage = ({ favoriteEpisodes, toggleFavorite, onBackToShows }) => {
                         transition: 'all 0.3s ease',
                         '&:hover': {
                             background: 'linear-gradient(45deg, #2575fc 30%, #6a11cb 90%)',
-                            transform: 'scale(1.05)',
+                            transform: 'scale(1.05)', // Hover effect to scale button
                         },
                     }}
                 >
@@ -100,12 +109,12 @@ const FavoritesPage = ({ favoriteEpisodes, toggleFavorite, onBackToShows }) => {
                     label="Search"
                     variant="outlined"
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => setSearchQuery(e.target.value)} // Update searchQuery state on input change
                     sx={{ flex: 1 }}
                 />
                 <Select
                     value={sortOption}
-                    onChange={(e) => setSortOption(e.target.value)}
+                    onChange={(e) => setSortOption(e.target.value)} // Update sortOption state on selection change
                     variant="outlined"
                     sx={{ minWidth: 150 }}
                 >
@@ -133,6 +142,7 @@ const FavoritesPage = ({ favoriteEpisodes, toggleFavorite, onBackToShows }) => {
                 </Box>
             ) : (
                 <List>
+                    {/* Map through sortedFavorites to display each episode */}
                     {sortedFavorites.map((fav, index) => (
                         <React.Fragment key={`${fav.showId}-${fav.episodeTitle}`}>
                             <ListItem>
@@ -176,23 +186,23 @@ const FavoritesPage = ({ favoriteEpisodes, toggleFavorite, onBackToShows }) => {
                                             })
                                         }
                                     />
+                                   {/* Delete icon button to remove the episode from favorites */}
                                    <IconButton
-    edge="end"
-    aria-label="delete"
-    onClick={() => handleRemoveFavorite(fav)}
-    sx={{
-        color: 'red', // Set the color of the button to red
-        '&:hover': {
-            backgroundColor: 'rgba(255, 0, 0, 0.1)', // Optional hover effect
-        },
-    }}
->
-    <DeleteIcon />
-</IconButton>
-
+                                       edge="end"
+                                       aria-label="delete"
+                                       onClick={() => handleRemoveFavorite(fav)}
+                                       sx={{
+                                           color: 'red',
+                                           '&:hover': {
+                                               backgroundColor: 'rgba(255, 0, 0, 0.1)', // Optional hover effect
+                                           },
+                                       }}
+                                   >
+                                       <DeleteIcon />
+                                   </IconButton>
                                 </Box>
                             </ListItem>
-                            {index < sortedFavorites.length - 1 && <Divider />}
+                            {index < sortedFavorites.length - 1 && <Divider />} {/* Divider between list items */}
                         </React.Fragment>
                     ))}
                 </List>
@@ -201,6 +211,7 @@ const FavoritesPage = ({ favoriteEpisodes, toggleFavorite, onBackToShows }) => {
     );
 };
 
+// Prop types validation for the FavoritesPage component
 FavoritesPage.propTypes = {
     favoriteEpisodes: PropTypes.arrayOf(
         PropTypes.shape({
@@ -213,8 +224,9 @@ FavoritesPage.propTypes = {
             updated: PropTypes.string.isRequired,
         })
     ).isRequired,
-    toggleFavorite: PropTypes.func.isRequired,
-    onBackToShows: PropTypes.func.isRequired,
+    toggleFavorite: PropTypes.func.isRequired, // Function to toggle favorite status
+    onBackToShows: PropTypes.func.isRequired, // Function to navigate back to the shows page
 };
 
+// Export the component
 export default FavoritesPage;
