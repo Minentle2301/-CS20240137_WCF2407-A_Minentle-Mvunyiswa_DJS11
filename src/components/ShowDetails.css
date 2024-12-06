@@ -1,41 +1,64 @@
 .show-details {
-    text-align: center; /* Center-align text */
-    margin: 20px; /* Add some margin */
+    text-align: center;
+    margin: 20px;
+    background: linear-gradient(to right, #e0f7fa, #80deea); /* Linear gradient background */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px; /* Padding for inner spacing */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
 .show-image {
-    width: 100%; /* Make the image responsive */
-    max-width: 600px; /* Limit max width */
-    height: auto; /* Maintain aspect ratio */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
-    margin-bottom: 20px; /* Space below the image */
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
 }
 
 h1 {
-    font-size: 2em; /* Increase font size for title */
-    margin: 10px 0; /* Space around the title */
+    font-size: 2.5em;
+    margin: 10px 0;
+    color: #00796b; /* Dark teal color for title */
 }
 
 p {
-    font-size: 1.1em; /* Slightly larger font for description */
-    line-height: 1.5; /* Increase line height for readability */
+    font-size: 1.1em;
+    line-height: 1.5;
+    color: #555; /* Dark gray for text */
 }
 
 .seasons {
-    margin-top: 20px; /* Space above the seasons section */
+    margin-top: 20px;
 }
 
-.season-link {
-    display: inline-block; /* Make links inline-block */
-    margin: 5px 10px; /* Space between links */
-    padding: 10px 15px; /* Padding for better click area */
-    background-color: #007bff; /* Background color */
-    color: white; /* Text color */
-    border-radius: 5px; /* Rounded corners */
-    text-decoration: none; /* Remove underline */
+.season-button {
+    display: inline-block;
+    margin: 5px 10px;
+    padding: 10px 15px;
+    background-color: #007bff; /* Primary color */
+    color: white;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.season-link:hover {
+.season-button:hover {
     background-color: #0056b3; /* Darker shade on hover */
+}
+
+.details-button, .favorites-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #3f51b5; /* Primary color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.details-button:hover, .favorites-button:hover {
+    background-color: #303f9f; /* Darker shade on hover */
 }

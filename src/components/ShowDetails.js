@@ -1,4 +1,3 @@
-// Import necessary dependencies
 import React, { useEffect, useState } from "react"; // React and hooks for managing state and effects
 import { useParams, Link, useNavigate } from "react-router-dom"; // For routing and navigation in the app
 import axios from "axios"; // Axios for making HTTP requests to fetch data
@@ -9,11 +8,9 @@ import "./ShowDetails.css"; // Import custom styling for this component
 
 // Define the ShowDetails component
 const ShowDetails = ({ favorites, addFavorite, removeFavorite }) => {
-    // Get the 'id' from the URL using useParams hook
     const { id } = useParams();
     const navigate = useNavigate(); // useNavigate hook to programmatically navigate
 
-    // State variables for holding various data and UI states
     const [show, setShow] = useState(null); // Stores details of the show
     const [episodes, setEpisodes] = useState([]); // Stores episodes of the selected season
     const [selectedSeason, setSelectedSeason] = useState(1); // Tracks which season is selected
@@ -24,15 +21,12 @@ const ShowDetails = ({ favorites, addFavorite, removeFavorite }) => {
     const [listenedEpisodes, setListenedEpisodes] = useState([]); // Stores the list of episodes marked as listened
     const [episodeTimestamps, setEpisodeTimestamps] = useState({}); // Stores the timestamps for each episode
 
-    // useEffect to fetch show data and genres when the component mounts or when 'id' or 'selectedSeason' changes
     useEffect(() => {
-        // Function to fetch show data from API
         const fetchShowData = async () => {
             try {
                 const response = await axios.get(`https://podcast-api.netlify.app/id/${id}`);
                 setShow(response.data); // Set the fetched show data in the state
 
-                // If the show has seasons, set the episodes for the selected season
                 if (response.data.seasons?.length > 0) {
                     setEpisodes(response.data.seasons[selectedSeason - 1]?.episodes || []);
                 }
@@ -41,7 +35,6 @@ const ShowDetails = ({ favorites, addFavorite, removeFavorite }) => {
             }
         };
 
-        // Function to fetch genres data from API
         const fetchGenres = async () => {
             try {
                 const response = await axios.get('https://podcast-api.netlify.app/genres');
@@ -55,13 +48,11 @@ const ShowDetails = ({ favorites, addFavorite, removeFavorite }) => {
         fetchGenres(); // Fetch the genres data
     }, [id, selectedSeason]); // Dependency array ensures this effect runs when 'id' or 'selectedSeason' changes
 
-    // Function to handle season change (when a user clicks on a different season button)
     const handleSeasonChange = (seasonNumber) => {
         setSelectedSeason(seasonNumber); // Set the new selected season
         setEpisodes(show.seasons[seasonNumber - 1]?.episodes || []); // Update the episodes for the selected season
     };
 
-    // Functions to handle opening and closing the podcast details modal
     const handleOpenModal = () => {
         setModalOpen(true); // Open the modal by setting modalOpen to true
     };
@@ -70,14 +61,11 @@ const ShowDetails = ({ favorites, addFavorite, removeFavorite }) => {
         setModalOpen(false); // Close the modal by setting modalOpen to false
     };
 
-    // Function to handle playing an episode (currently just logs the episode title)
     const handlePlayEpisode = (episode) => {
         console.log("Playing episode:", episode.title); // Replace with actual episode playing logic
     };
 
-    // Function to toggle favorite status of an episode
     const handleToggleFavorite = (episodeData) => {
-        // Create a new episode data object with relevant information
         const newEpisodeData = {
             showId: show.id,
             showTitle: show.title,
@@ -87,7 +75,6 @@ const ShowDetails = ({ favorites, addFavorite, removeFavorite }) => {
             updated: show.updated
         };
 
-        // If the episode is already a favorite, remove it from favorites
         if (isFavorite(newEpisodeData)) {
             setFavoriteEpisodes(favoriteEpisodes.filter(fav =>
                 !(fav.showId === newEpisodeData.showId &&
@@ -96,45 +83,41 @@ const ShowDetails = ({ favorites, addFavorite, removeFavorite }) => {
             ));
             removeFavorite(newEpisodeData); // Remove from favorites
         } else {
-            // Otherwise, add it to favorites
             setFavoriteEpisodes([...favoriteEpisodes, newEpisodeData]);
             addFavorite(newEpisodeData); // Add to favorites
         }
     };
 
-    // Function to check if an episode is already in the favorites list
     const isFavorite = (episode) => {
-        return favoriteEpisodes.some(fav =>
+        return favoriteEpisodes .some(fav =>
             fav.showId === episode.showId &&
             fav.episodeTitle === episode.episodeTitle &&
             fav.seasonTitle === episode.seasonTitle
         );
     };
 
-    // If there's an error, display the error message
     if (error) {
         return <div>{error}</div>;
     }
 
-    // If show data is still loading, display a loading message
     if (!show) {
         return <div>Loading...</div>;
     }
 
     return (
         <div className="show-details">
-            <img src={show.image} alt={show.title} className="show-image" /> {/* Display show image */}
-            <h1>{show.title}</h1> {/* Display show title */}
-            <p>{show.description}</p> {/* Display show description */}
+            <img src={show.image} alt={show.title} className="show-image" />
+            <h1>{show.title}</h1>
+            <p>{show.description}</p>
 
             <h2>Seasons</h2>
-            <p>Last Updated: {new Date(show.updated).toLocaleDateString()}</p> {/* Display last updated date */}
-            <p>Genres: {show.genres?.join(", ") || "N/A"}</p> {/* Display genres */}
+            <p>Last Updated: {new Date(show.updated).toLocaleDateString()}</p>
+            <p>Genres: {show.genres?.join(", ") || "N/A"}</p>
 
             <div className="seasons">
                 {show.seasons.map((season, index) => (
-                    <button key={index} onClick={() => handleSeasonChange(index + 1)}>
-                        Season {index + 1} {/* Button to select a season */}
+                    <button key={index} onClick={() => handleSeasonChange(index + 1)} className="season-button">
+                        Season {index + 1}
                     </button>
                 ))}
             </div>
@@ -142,44 +125,40 @@ const ShowDetails = ({ favorites, addFavorite, removeFavorite }) => {
             <div>
                 <h3>Season {selectedSeason} Episodes</h3>
                 <EpisodePlayer
-                    episodes={episodes} // Pass episodes to the EpisodePlayer component
-                    onFavoriteToggle={handleToggleFavorite} // Pass the toggle favorite function
-                    favoriteEpisodes={favoriteEpisodes} // Pass the list of favorite episodes
+                    episodes={episodes}
+                    onFavoriteToggle={handleToggleFavorite}
+                    favoriteEpisodes={favoriteEpisodes}
                 />
             </div>
 
-            <button onClick={handleOpenModal}>Show Details</button> {/* Button to open the modal */}
+            <button onClick={handleOpenModal} className="details-button">Show Details</button>
 
-            {/* PodcastDetailsModal component for showing additional podcast details */}
             <PodcastDetailsModal
-                show={show} // Pass show details to the modal
-                genres={genres} // Pass the list of genres to the modal
-                open={modalOpen} // Control modal visibility
-                onClose={handleCloseModal} // Function to close the modal
-                onPlayEpisode={handlePlayEpisode} // Pass the play episode function
-                loading={!show} // Pass loading state
-                toggleFavorite={handleToggleFavorite} // Pass the toggle favorite function
-                favoriteEpisodes={favoriteEpisodes} // Pass the list of favorite episodes
-                listenedEpisodes={listenedEpisodes} // Pass the list of listened episodes
-                episodeTimestamps={episodeTimestamps} // Pass the timestamps for episodes
+                show={show}
+                genres={genres}
+                open={modalOpen}
+                onClose={handleCloseModal}
+                onPlayEpisode={handlePlayEpisode}
+                loading={!show}
+                toggleFavorite={handleToggleFavorite}
+                favoriteEpisodes={favoriteEpisodes}
+                listenedEpisodes={listenedEpisodes}
+                episodeTimestamps={episodeTimestamps}
             />
 
-            {/* Link to the favorites page */}
             <Link to="/favorites">
-                <button onClick={() => navigate("/favorites")}>
-                    View Favorites {/* Button to navigate to the favorites page */}
+                <button onClick={() => navigate("/favorites")} className="favorites-button">
+                    View Favorites
                 </button>
             </Link>
         </div>
     );
 };
 
-// PropTypes to validate props passed to the ShowDetails component
 ShowDetails.propTypes = {
-    favorites: PropTypes.array.isRequired, // Validate that favorites is an array
-    addFavorite: PropTypes.func.isRequired, // Validate that addFavorite is a function
-    removeFavorite: PropTypes.func.isRequired, // Validate that removeFavorite is a function
+    favorites: PropTypes.array.isRequired,
+    addFavorite: PropTypes.func.isRequired,
+    removeFavorite: PropTypes.func.isRequired,
 };
 
-// Export the ShowDetails component for use in other parts of the app
 export default ShowDetails;
